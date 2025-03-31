@@ -1,27 +1,26 @@
 import random
-from pyunit_prime import get_large_prime_length    #随机生成指定长度大素数
-from pyunit_prime import is_prime                  #判断素数
-from pyunit_prime import prime_range               #输出指定区间素数
+from Crypto.Util.number import getPrime, isPrime
+from primePy import primes
 import math
 
 
 p=0
 q=0
-    
+
 def primeFactorization(length):                    #分解质因数
     global p,q
-    q=get_large_prime_length(length)
+    q=getPrime(length)
     while True:
         d=random.randint(2,10000)
         if d%2==0:
             p=q*d+1
-            if is_prime(p)==True:
+            if isPrime(p)==True:
                 break
             else:
                 continue
         else:
             continue
-    primeList=prime_range(2,int(math.sqrt(d)))
+    primeList=primes.between(2,int(math.sqrt(d)))
     result=[[0,0] for i in range(len(primeList))]
     for i in range(len(primeList)):
         result[i][0]=primeList[i]
@@ -31,7 +30,7 @@ def primeFactorization(length):                    #分解质因数
     if d!=1:
         result.append([d,1])
     result.append([q,1])
-    return result  
+    return result
 
 def quickPower(a,b,c):                               #快速幂
     result=1
@@ -96,7 +95,7 @@ if __name__ == "__main__":
     g=getGenerator(result)
     SK=getSecretKey()
     PK=getPublicKey(g,SK)
-    
+
     msg1='i sent first message'                  #消息1
     msg2='second message'                        #消息2
     newmsg1=treatMSG(msg1)
@@ -115,10 +114,9 @@ if __name__ == "__main__":
     CH=ChameleonHash(PK,g,newmsg1,rand1)
     print('CH=',CH)
     print('')
-    
+
     print('msg2=',msg2)
     rand2=Forge(SK,newmsg1,rand1,newmsg2)
     print('rand2=',rand2)
     newCH=ChameleonHash(PK,g,newmsg2,rand2)
     print('newCH=',newCH)
-
